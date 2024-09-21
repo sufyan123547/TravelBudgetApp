@@ -1,3 +1,4 @@
+import 'package:app/auth/loginscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class SignupController extends GetxController {
 
   // Rx variable to observe the loading state
   var isLoading = false.obs;
+  var isPasswordVisible = false.obs;
 
   // Method to handle signup
   Future<void> signUpUser() async {
@@ -49,7 +51,7 @@ class SignupController extends GetxController {
 
         // Navigate to the next screen after successful signup
         Get.snackbar("Success", "User signed up successfully");
-        Get.offAllNamed('/home'); // Navigate to home screen or any other route
+        Get.off(LoginScreen()); // Navigate to login screen
       } on FirebaseAuthException catch (e) {
         Get.snackbar("Error", e.message ?? "Signup failed");
       } finally {

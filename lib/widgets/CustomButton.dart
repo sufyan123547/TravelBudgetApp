@@ -24,21 +24,24 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {
-          onPressed;
-        },
-        style: ElevatedButton.styleFrom(
-          elevation: elevation,
-          backgroundColor: backgroundColor,
-          foregroundColor: textColor,
-          minimumSize: Size(width, height),
-          shape: const StadiumBorder(),
+      onPressed: onPressed, // Here the callback is invoked correctly
+      style: ElevatedButton.styleFrom(
+        elevation: elevation,
+        backgroundColor: backgroundColor,
+        foregroundColor: textColor,
+        minimumSize: Size(width, height),
+        shape: const StadiumBorder(),
+      ),
+      child: Text(
+        text,
+        style: GoogleFonts.poppins(
+          textStyle: TextStyle(
+            color: textColor,
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        child: Text(text,
-            style: GoogleFonts.poppins(
-                textStyle: TextStyle(
-                    color: textColor,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500))));
+      ),
+    );
   }
 }

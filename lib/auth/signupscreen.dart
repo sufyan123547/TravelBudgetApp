@@ -30,6 +30,12 @@ class SignupScreen extends StatelessWidget {
                     controller: controller.fullNameController,
                     keyboardType: TextInputType.name,
                     prefixIcon: Icon(Icons.person),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Full name is required';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
@@ -37,27 +43,66 @@ class SignupScreen extends StatelessWidget {
                     controller: controller.emailController,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: Icon(Icons.email),
+                    validator: (value) {
+                      if (!GetUtils.isEmail(value ?? "")) {
+                        return 'Enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
-                  CustomTextField(
-                    hintText: 'Password',
-                    controller: controller.passwordController,
-                    isPassword: true,
-                    prefixIcon: Icon(Icons.lock),
-                  ),
+                  Obx(() => CustomTextField(
+                        hintText: 'Password',
+                        controller: controller.passwordController,
+                        isPassword: true,
+                        prefixIcon: Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(controller.isPasswordVisible.value
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () {
+                            controller.isPasswordVisible.value =
+                                !controller.isPasswordVisible.value;
+                          },
+                        ),
+                        validator: (value) {
+                          if (value == null || value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      )),
                   const SizedBox(height: 16),
                   CustomTextField(
                     hintText: 'Phone Number',
                     controller: controller.phoneController,
                     keyboardType: TextInputType.phone,
                     prefixIcon: Icon(Icons.phone),
+                    validator: (value) {
+                      if (value == null || value.length != 10) {
+                        return 'Enter a valid 10-digit phone number';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
-                  CustomTextField(
-                    hintText: 'Gender',
-                    controller: controller.genderController,
-                    keyboardType: TextInputType.text,
-                    prefixIcon: Icon(Icons.person_outline),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.person_outline),
+                      hintText: 'Gender',
+                    ),
+                    value: controller.genderController.text.isEmpty
+                        ? null
+                        : controller.genderController.text,
+                    items: ['Male', 'Female', 'Other'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      controller.genderController.text = newValue!;
+                    },
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
@@ -65,6 +110,12 @@ class SignupScreen extends StatelessWidget {
                     controller: controller.nicController,
                     keyboardType: TextInputType.number,
                     prefixIcon: Icon(Icons.badge),
+                    validator: (value) {
+                      if (value == null || value.length != 13) {
+                        return 'Enter a valid 13-digit NIC number';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
@@ -72,6 +123,12 @@ class SignupScreen extends StatelessWidget {
                     controller: controller.passportController,
                     keyboardType: TextInputType.text,
                     prefixIcon: Icon(Icons.airplanemode_active),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Passport number is required';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
@@ -79,17 +136,19 @@ class SignupScreen extends StatelessWidget {
                     controller: controller.locationController,
                     keyboardType: TextInputType.text,
                     prefixIcon: Icon(Icons.location_on),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Location is required';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 32),
-                  Obx(() => CustomButton(
-                        text: controller.isLoading.value
-                            ? 'Signing up...'
-                            : 'Sign up',
-                        onPressed: controller.signUpUser,
-                        backgroundColor: const Color(0xFF00BF6D),
-                        textColor: Colors.white,
-                        width: double.infinity,
-                      )),
+                  CustomButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        controller.signUpUser();
+                      })
                 ],
               ),
             ),
